@@ -1,0 +1,30 @@
+@startuml
+actor User
+participant "Frontend" as FE
+participant "API Gateway" as GW
+participant "Streaming Service" as SS
+participant "Subscription Service" as SUB
+participant "User Service" as US
+participant "Content Service" as CS
+participant "CDN" as CDN
+
+User -> FE : Click Play
+FE -> GW : PlayRequest(contentId)
+GW -> SS : Forward request
+
+SS -> SUB : Validate subscription
+SUB --> SS : OK
+
+SS -> US : Get active profile
+US --> SS : Profile data
+
+SS -> CS : Get content metadata
+CS --> SS : Metadata
+
+SS -> CDN : Request stream URL
+CDN --> SS : HLS/DASH URL
+
+SS --> GW : Stream URL
+GW --> FE : Stream URL
+
+@enduml

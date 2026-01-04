@@ -1,0 +1,41 @@
+@startuml
+skinparam packageStyle rectangle
+
+package "User Service" {
+  [UserController]
+  [ProfileManager]
+  [WatchHistory]
+}
+
+package "Content Service" {
+  [ContentController]
+  [ContentFactory]
+  [RatingManager]
+}
+
+package "Recommendation Service" {
+  [RecommendationController]
+  [RecommendationEngine]
+  [RecommendationStrategy]
+}
+
+package "Subscription Service" {
+  [SubscriptionController]
+  [Subscription]
+  [SubscriptionDecorator]
+  [SubscriptionState]
+}
+
+package "Streaming Service" {
+  [StreamingController]
+  [StreamingFacade]
+  [VideoProxy]
+  [AccessValidator]
+}
+
+[RecommendationEngine] --> [RecommendationStrategy]
+[StreamingFacade] --> [VideoProxy]
+[StreamingFacade] --> [AccessValidator]
+[Subscription] <|-- [SubscriptionDecorator]
+
+@enduml

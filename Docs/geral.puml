@@ -1,0 +1,40 @@
+@startuml
+skinparam componentStyle rectangle
+
+actor User
+
+component "Web / Mobile App\n(React SPA)" as Frontend
+component "API Gateway\n(Auth, JWT, Rate Limit)" as Gateway
+
+component "User Service" as UserSvc
+component "Content Service" as ContentSvc
+component "Recommendation Service" as RecSvc
+component "Subscription Service" as SubSvc
+component "Streaming Service" as StreamSvc
+
+database "User DB" as UserDB
+database "Content DB" as ContentDB
+database "Recommendation DB" as RecDB
+database "Subscription DB" as SubDB
+
+component "CDN\n(HLS / DASH)" as CDN
+component "Payment Gateway" as Payment
+
+User --> Frontend
+Frontend --> Gateway
+
+Gateway --> UserSvc
+Gateway --> ContentSvc
+Gateway --> RecSvc
+Gateway --> SubSvc
+Gateway --> StreamSvc
+
+UserSvc --> UserDB
+ContentSvc --> ContentDB
+RecSvc --> RecDB
+SubSvc --> SubDB
+
+SubSvc --> Payment
+StreamSvc --> CDN
+
+@enduml
