@@ -14,6 +14,12 @@ namespace SubscriptionService.Infrastructure.Persistence
         {
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(SubscriptionDbContext).Assembly);
+
+            modelBuilder.Entity<Subscription>()
+                .Ignore(s => s.Plan);
+
+            modelBuilder.Entity<Subscription>()
+                .Ignore(s => s.State);
         }
     }
 

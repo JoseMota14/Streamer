@@ -1,10 +1,11 @@
 ﻿using SharedKernel.IntegrationEvents;
 using StreamingService.Domain.Entities;
 using StreamingService.Domain.Repositories;
+using SubscriptionService.Domain.Observer;
 
 namespace StreamingService.Application.EventHandlers
 {
-    public sealed class SubscriptionActivatedHandler : IIntegrationEventHandler<SubscriptionActivatedIntegrationEvent>
+    public sealed class SubscriptionActivatedHandler : IDomainEventHandler<SubscriptionActivated>
     {
         private readonly IStreamingPermissionRepository _repository;
 
@@ -13,17 +14,14 @@ namespace StreamingService.Application.EventHandlers
             _repository = repository;
         }
 
-        public async Task HandleAsync(SubscriptionActivatedIntegrationEvent @event, CancellationToken ct)
+        public Task HandleAsync(
+        SubscriptionActivated domainEvent,
+        CancellationToken ct)
         {
-            // Exemplo: criar permissões de streaming para o utilizador
-            var permission = new  StreamingPermission(
-                @event.UserId,
-                new StreamingCapabilities(@event.UltraHd, @event.OfflineDownload, @event.MaxProfiles)
-            );
+            Console.WriteLine(
+                $"[DOMAIN] SubscriptionActivated for User {domainEvent.UserId}");
 
-            await _repository.AddAsync(permission, ct);
-
-            Console.WriteLine($"[StreamingService] Permissões de streaming criadas para UserId: {@event.UserId}");
+            return Task.CompletedTask;
         }
     }
 }

@@ -18,8 +18,27 @@ namespace StreamingService.API.Infra
 
             services.AddScoped<IStreamingPermissionRepository, StreamingPermissionRepository>();
 
+            RegisterEvents(services);
 
             return services;
+        }
+
+        public static void RegisterEvents(IServiceCollection services)
+        {
+            services.AddSingleton<IConnection>(_ =>
+            {
+                var factory = new ConnectionFactory
+                {
+                    HostName = "localhost",
+                    UserName = "guest",
+                    Password = "guest",
+                    DispatchConsumersAsync = true
+                };
+
+                return factory.CreateConnection();
+            });
+
+            services.AddSingleton<SubscriptionActivatedConsumer>();
         }
 
         public static void AddEvents(IServiceCollection services)

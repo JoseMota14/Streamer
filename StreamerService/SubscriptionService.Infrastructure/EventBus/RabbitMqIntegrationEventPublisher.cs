@@ -1,15 +1,11 @@
 ﻿using RabbitMQ.Client;
 using SubscriptionService.Application.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace SubscriptionService.Infrastructure.EventBus
 {
-    public sealed class RabbitMqIntegrationEventPublisher : IIntegrationEventPublisher
+    public sealed class RabbitMqIntegrationEventPublisher: IIntegrationEventPublisher
     {
         private readonly IConnection _connection;
 
@@ -26,15 +22,22 @@ namespace SubscriptionService.Infrastructure.EventBus
             channel.ExchangeDeclare(
                 exchange: "integration.events",
                 type: ExchangeType.Topic,
-                durable: true);
+                durable: true,
+                autoDelete: false);
 
-            var body = JsonSerializer.SerializeToUtf8Bytes(@event);
+            var body = JsonSerializer.SerializeToUtf8Bytes(@event, typeof(TEvent));
+
+            var properties = channel.CreateBasicProperties();
+            properties.DeliveryMode = 2; // Persistent
+            properties.Type = typeof(TEvent).FullName;
 
             channel.BasicPublish(
                 exchange: "integration.events",
                 routingKey: typeof(TEvent).Name,
-                basicProperties: null,
+                basicProperties: properties,
                 body: body);
+
+            Console.WriteLine($"[RabbitMQ] Event published: {typeof(TEvent).Name}");
 
             return Task.CompletedTask;
         }

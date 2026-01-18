@@ -1,7 +1,5 @@
-﻿using SharedKernel.Domain;
-using SubscriptionService.Application.Abstractions;
+﻿using SubscriptionService.Application.Abstractions;
 using SubscriptionService.Application.Interfaces;
-using SubscriptionService.Application.Mapping;
 using SubscriptionService.Domain;
 using SubscriptionService.Domain.Observer;
 using SubscriptionService.Domain.Plan;
@@ -14,14 +12,14 @@ namespace SubscriptionService.Application.Commands
     {
         private readonly ISubscriptionRepository _repository;
         private readonly IPlanFactory _planFactory;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IIntegrationEventPublisher _eventPublisher;
         private readonly IUnitOfWork _uow;
         private readonly DomainEventDispatcher _dispatcher;
 
         public SubscribeCommandHandler(
             ISubscriptionRepository repository,
             IPlanFactory planFactory,
-            IEventPublisher eventPublisher,
+            IIntegrationEventPublisher eventPublisher,
             IUnitOfWork uow,
             DomainEventDispatcher dispatcher)
         {

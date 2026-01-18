@@ -14,11 +14,15 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 
-var scope = app.Services.CreateScope();
+/*var scope = app.Services.CreateScope();
 var subscriber = scope.ServiceProvider.GetRequiredService<RabbitMqSubscriber>();
 var handler = scope.ServiceProvider.GetRequiredService<SubscriptionActivatedHandler>();
 
-subscriber.Subscribe("subscription.events", handler);
+subscriber.Subscribe("subscription.events", handler);*/
+
+var consumer = app.Services.GetRequiredService<SubscriptionActivatedConsumer>();
+
+consumer.Start();
 
 if (app.Environment.IsDevelopment())
 {

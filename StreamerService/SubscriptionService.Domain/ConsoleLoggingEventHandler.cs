@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace SubscriptionService.Domain
 {
-    public sealed class ConsoleLoggingEventHandler<TEvent> : IDomainEventHandler<TEvent>
-        where TEvent : DomainEvent
+    public sealed class ConsoleLoggingEventHandler<TEvent> : IDomainEventHandler<TEvent> where TEvent : DomainEvent
     {
         public Task HandleAsync(TEvent domainEvent, CancellationToken ct)
         {

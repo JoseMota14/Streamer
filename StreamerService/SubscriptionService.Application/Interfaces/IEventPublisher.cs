@@ -1,9 +1,4 @@
 ﻿using SharedKernel.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubscriptionService.Application.Interfaces
 {
@@ -11,5 +6,4 @@ namespace SubscriptionService.Application.Interfaces
     {
         Task PublishAsync(IEnumerable<DomainEvent> events, CancellationToken ct);
     }
-
 }

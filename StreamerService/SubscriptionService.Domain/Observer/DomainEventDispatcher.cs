@@ -12,12 +12,19 @@ namespace SubscriptionService.Domain.Observer
             _serviceProvider = serviceProvider;
         }
 
-        public async Task DispatchAsync(IEnumerable<DomainEvent> events, CancellationToken ct)
+        public async Task DispatchAsync(
+            IEnumerable<DomainEvent> events,
+            CancellationToken ct)
         {
+            using var scope = _serviceProvider.CreateScope();
+            var scopedProvider = scope.ServiceProvider;
+
             foreach (var domainEvent in events)
             {
-                var handlerType = typeof(IDomainEventHandler<>).MakeGenericType(domainEvent.GetType());
-                var handlers = _serviceProvider.GetServices(handlerType);
+                var handlerType = typeof(IDomainEventHandler<>)
+                    .MakeGenericType(domainEvent.GetType());
+
+                var handlers = scopedProvider.GetServices(handlerType);
 
                 foreach (dynamic handler in handlers)
                 {

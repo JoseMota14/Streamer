@@ -5,6 +5,7 @@ using SubscriptionService.Application.Commands;
 using SubscriptionService.Application.DTOs;
 using SubscriptionService.Application.Interfaces;
 using SubscriptionService.Application.Queries;
+using SubscriptionService.Domain;
 using SubscriptionService.Domain.Observer;
 using SubscriptionService.Infrastructure.EventBus;
 using SubscriptionService.Infrastructure.Factories;
@@ -46,7 +47,11 @@ namespace SubscriptionService.API.Infra
             });
 
             // Integration Event Publisher
-            services.AddScoped<IIntegrationEventPublisher, RabbitMqIntegrationEventPublisher>();
+            services.AddScoped(typeof(IDomainEventHandler<>),
+                               typeof(ConsoleLoggingEventHandler<>));
+
+            services.AddSingleton<IIntegrationEventPublisher,RabbitMqIntegrationEventPublisher>();
+
             services.AddSingleton<DomainEventDispatcher>();
         }
 
@@ -59,7 +64,18 @@ namespace SubscriptionService.API.Infra
 
         private static void AddBusConfig(IServiceCollection services)
         {
-            services.AddScoped<IEventPublisher, InMemoryEventBus>();
+            //services.AddSingleton<IIntegrationEventPublisher, RabbitMqIntegrationEventPublisher>();
+
+            //if (builder.Environment.IsDevelopment())
+            //{
+            //    builder.Services.AddSingleton<IIntegrationEventPublisher,
+            //        InMemoryIntegrationEventPublisher>();
+            //}
+            //else
+            //{
+            //    builder.Services.AddSingleton<IIntegrationEventPublisher,
+            //        RabbitMqIntegrationEventPublisher>();
+            //}
         }
 
         private static void AddInfra(IServiceCollection services)

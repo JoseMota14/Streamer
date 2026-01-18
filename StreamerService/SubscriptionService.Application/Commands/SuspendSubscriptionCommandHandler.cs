@@ -7,12 +7,12 @@ namespace SubscriptionService.Application.Commands
     public sealed class SuspendSubscriptionCommandHandler: ICommandHandler<SuspendSubscriptionCommand>
     {
         private readonly ISubscriptionRepository _repository;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IIntegrationEventPublisher _eventPublisher;
         private readonly IUnitOfWork _uow;
 
         public SuspendSubscriptionCommandHandler(
             ISubscriptionRepository repository,
-            IEventPublisher eventPublisher,
+            IIntegrationEventPublisher eventPublisher,
             IUnitOfWork uow)
         {
             _repository = repository;
